@@ -45,5 +45,6 @@ def link(context, slug, *args, **kwargs):
         tmpl = get_template(kwargs.pop('template'))
     else:
         tmpl = template.Template('<a href="{{ link.url }}>{{ link.title }}</a>')
-    with extra_context(context, kwargs, link=link):
+    kwargs['link'] = link
+    with extra_context(context, kwargs):
         return tmpl.render(context)
