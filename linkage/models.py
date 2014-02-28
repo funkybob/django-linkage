@@ -1,6 +1,7 @@
 
 from django.db import models
 
+from taggit.managers import TaggableManager
 from polymorphic import PolymorphicModel
 
 from contenttypes import ContentType
@@ -8,6 +9,8 @@ from contenttypes import ContentType
 class Link(PolymorphicModel):
     title = models.CharField(max_length=1024, blank=True)
     description = models.TextField(blank=True)
+
+    tags = TaggableManager(blank=True)
 
     def __unicode__(self):
         return u'<{}> {} ({})'.format(self.__class__.__name__, self.title, self.href)
