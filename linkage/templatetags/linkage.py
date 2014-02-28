@@ -11,3 +11,14 @@ def get_menu(name):
     return models.Menu.objects.select_related('items').get(
         Q(title=name) | Q(slug=name)
     )
+
+@register.assignment_tag
+def load_links_with(*tags):
+    '''Load a list of links sharing all tags
+
+    {% load_links_with 'foo' as foo_links %}
+    '''
+    qs = models.Menu.objects.all()
+    for tag in tags:
+        qs = qs.filter(tags__name=tag)
+    return qs
