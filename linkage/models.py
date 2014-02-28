@@ -61,7 +61,7 @@ class ObjectLink(Link):
 class Menu(models.Model):
     '''A menu root'''
     title = models.CharField(max_length=1024, unique=True)
-    slug = models.SlugField(max_length=1024)
+    slug = models.SlugField(max_length=1024, unique=True)
 
 class MenuItem(models.Model):
     '''
@@ -71,7 +71,7 @@ class MenuItem(models.Model):
     their order field, and the 'level' field can be used to indicate
     now 'nested' they are.
     '''
-    menu = models.ForeignKey('Menu')
+    menu = models.ForeignKey('Menu', related_name='items')
     level = models.PositiveIntegerField(default=0)
     order = models.PositiveIntegerField(default=0)
     label = model.CharField(max_length=1024, blank=True)
