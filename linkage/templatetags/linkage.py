@@ -1,4 +1,6 @@
 
+from contextlib import contextmanager
+
 from linkage import models
 
 from django.db.models import Q
@@ -33,3 +35,28 @@ def menu(menu_name):
     )
     return {'menu': menu}
 
+
+@contextmanager
+def extra_context(context, extra):
+    '''Temporarily add some context, and clean up after ourselves.'''
+    context.update(extra)
+    yield
+    context.pop()
+
+
+@register.simple_tag(takes_context=True)
+def link(context, slug, *args, **kwargs):
+    '''Embed a link'''
+    # Find the link by slug
+    try:
+        link = Link.objects.get(slug=slug)
+    except Link.DoesNotExist:
+        return ''
+
+    if 'template' in kwargs:
+        tmpl = get_template(kwargs.pop('template'))
+    else:
+        tmpl = template.Template('<a href="{{ link.url }}>{{ link.title }}</a>')
+    kwargs['link'] = link
+    with extra_context(context, kwargs):
+        return tmpl.render(context)
