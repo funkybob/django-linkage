@@ -1,39 +1,77 @@
+==============
 django-linkage
 ==============
 
 A links, menus and breadcrumbs tool for Django sites.
 
-Quick Start
------------
+Install
+=======
 
-1. Install as with any Django app:
+1. pip install django-linkage
+2. Add 'linkage' to INSTALLED_APPS
+3. run syncdb
 
-   .. code-block:: python
+Usage
+=====
 
-      INSTALLED_APPS = [
-          ...
-          'linkage',
-      ]
+Links
+-----
 
-2. For any models you want to be able to link to a List view for, add a
+Links allow you to configure links for reuse around your site.  There are three
+types of link:
+
+1. SimpleLink
+
+   Links to a static URL.
+
+2. ObjectTypeLink
+
+   Links to a Model's list view.  This is determined by the model having a
    ``get_list_url`` method.
 
-3. For any models you want to be able to link to a Detail view for, add a
-   ``get_detail_url`` method.
+3. ObjectLink
 
-4. Create Link records in Admin
+   Links to a Model's detail view.  This is determined using the instances
+   ``get_absolute_url`` method.
 
-5. Create Menu records in Admin, if you want.
-
-6. In your templates:
+You can use Links in your templates as follows:
 
 .. code-block:: html
 
-    {% load linkage %}
-    {% load_links_with 'foo' as foo_links %}
-    <ul>
-    {% for link in foo_links %}
-        <li><a href="{{ link.href }}">{{ link.title }}</a></li>
-    {% endfor %}
-    </ul>
+   {% load linkage %}
+   {% load_links_with 'foo' as foo_links %}
+   <ul>
+   {% for link in foo_links %}
+       <li><a href="{{ link.href }}">{{ link.title }}</a></li>
+   {% endfor %}
+   </ul>
 
+Or:
+
+.. code-block:: html
+
+   {% load linkage %}
+
+   {# Default template is linkage/link.html #}
+   {% link slug_or_name %}
+
+   {# Will render the template, passing the link instance as 'link' in context. #}
+   {% link slug_or_name template="link.html" %} 
+
+
+Menus
+-----
+
+You can construct ordered, hierarchical sets of Links as Menus.
+
+Each Menu has a title and a slug, and a list of MenuItems.  MenuItems have an
+order, link, label, and a level.  The level can be used as a hint for rendering.
+
+.. code-block:: html
+
+   {% load linkage %}
+   {# Default template is linkage/menu.html #}
+   {% menu slug_or_name %}
+
+   {# Passes the menu as 'menu' #}
+   {% menu slug_or_name template='menu.html' %}

@@ -8,7 +8,6 @@ from django import template
 
 register = template.Library()
 
-
 @contextmanager
 def extra_context(context, extra, **kwarwgs):
     '''Helper for adding extra context, and cleaning up after ourselves.'''
