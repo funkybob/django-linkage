@@ -33,13 +33,6 @@ LINKABLE_OBJECTS = ContentType.objects.get_for_models(*[
     if callable(getattr(model, 'get_absolute_url', None))
 ])
 
-# Models we can find a list page for
-LISTABLE_OBJECTS = ContentType.objects.get_for_models(*[
-    model
-    for app, model in models.get_models()
-    if callable(getattr(model, 'get_list_url', None))
-])
-
 class ObjectTypeLink(Link):
     object_type = models.ForeignKey('contenttypes.ContentType',
         limit_choices_to=LISTABLE_OBJECTS
@@ -47,6 +40,13 @@ class ObjectTypeLink(Link):
 
     def href(self):
         return self.object_type.model_class().get_list_url()
+
+# Models we can find a list page for
+LISTABLE_OBJECTS = ContentType.objects.get_for_models(*[
+    model
+    for app, model in models.get_models()
+    if callable(getattr(model, 'get_list_url', None))
+])
 
 class ObjectLink(Link):
     object_type = models.ForeignKey('contenttypes.ContentType',
