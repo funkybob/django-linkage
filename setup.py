@@ -9,6 +9,9 @@ setup(
     url='http://github.com/funkybob/django-linkage',
     keywords=['django',],
     packages = find_packages(exclude=('tests*',)),
+    package_data = {
+        'linkage': ['templates/linkage/*.html',],
+    },
     zip_safe=False,
     classifiers = [
         'Environment :: Web Environment',

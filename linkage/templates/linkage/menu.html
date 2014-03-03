@@ -1,0 +1,4 @@
+<h1>{{ menu.title }}</h1>
+<ul>{% for item in menu.items.all %}
+    <li><a href="{{ item.link.href }}">{{ item.label }}</a></li>{% endfor %}
+</ul>
