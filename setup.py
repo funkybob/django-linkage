@@ -20,8 +20,8 @@ setup(
         'Operating System :: OS Independent',
         'Programming Language :: Python',
     ],
-    requires = [
-        'Django (>=1.6)',
-        'django-polymorphic (>=0.5.1)',
+    install_requires = [
+        'Django>=1.6',
+        'django-polymorphic==0.5.3',
     ],
 )
