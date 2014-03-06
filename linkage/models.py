@@ -1,4 +1,5 @@
 
+from django.contrib.contentypes import generic
 from django.db import models
 
 from taggit.managers import TaggableManager
@@ -26,11 +27,11 @@ class SimpleLink(Link):
     def href(self):
         return self.url
 
-# The list of models we know how to get a url for
-LINKABLE_OBJECTS = ContentType.objects.get_for_models(*[
+# Models we can find a list page for
+LISTABLE_OBJECTS = ContentType.objects.get_for_models(*[
     model
     for app, model in models.get_models()
-    if callable(getattr(model, 'get_absolute_url', None))
+    if callable(getattr(model, 'get_list_url', None))
 ])
 
 class ObjectTypeLink(Link):
@@ -41,11 +42,11 @@ class ObjectTypeLink(Link):
     def href(self):
         return self.object_type.model_class().get_list_url()
 
-# Models we can find a list page for
-LISTABLE_OBJECTS = ContentType.objects.get_for_models(*[
+# The list of models we know how to get a url for
+LINKABLE_OBJECTS = ContentType.objects.get_for_models(*[
     model
     for app, model in models.get_models()
-    if callable(getattr(model, 'get_list_url', None))
+    if callable(getattr(model, 'get_absolute_url', None))
 ])
 
 class ObjectLink(Link):

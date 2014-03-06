@@ -1,15 +1,16 @@
 
 from contextlib import contextmanager
 
-from linkage import models
+from linkage.models import Link, Menu
 
 from django.db.models import Q
 from django import template
+from django.template.loaders import get_template
 
 register = template.Library()
 
 @contextmanager
-def extra_context(context, extra, **kwarwgs):
+def extra_context(context, extra, **kwargs):
     '''Helper for adding extra context, and cleaning up after ourselves.'''
     extra.update(kwargs)
     context.update(extra)
@@ -20,7 +21,7 @@ def extra_context(context, extra, **kwarwgs):
 @register.assignment_tag
 def get_menu(name):
     try:
-        return models.Menu.objects.select_related('items').get(
+        return Menu.objects.select_related('items').get(
             Q(title=name) | Q(slug=name)
         )
     except Menu.DoesNotExist:
@@ -33,7 +34,7 @@ def load_links_with(*tags):
 
     {% load_links_with 'foo' as foo_links %}
     '''
-    qs = models.Link.objects.all()
+    qs = Link.objects.all()
     for tag in tags:
         qs = qs.filter(tags__name=tag)
     return qs
@@ -42,7 +43,7 @@ def load_links_with(*tags):
 @register.simple_tag(takes_context=True)
 def link(context, name, **kwargs):
     try:
-        link = models.Link.objects.select_related('items').get(
+        link = Link.objects.select_related('items').get(
             Q(title=name) | Q(slug=name)
         )
     except Link.DoesNotExist:
@@ -56,9 +57,9 @@ def link(context, name, **kwargs):
 
 
 @register.simple_tag(takes_context=True)
-def menu(context, menu_name):
+def menu(context, name, **kwargs):
     try:
-        menu = models.Menu.objects.select_related('items').get(
+        menu = Menu.objects.select_related('items').get(
             Q(title=name) | Q(slug=name)
         )
     except Menu.DoesNotExist:
