@@ -1,16 +1,16 @@
 
-from django.contrib.contentypes import generic
+from django.contrib.contenttypes import generic
 from django.db import models
 
 from taggit.managers import TaggableManager
 from polymorphic import PolymorphicModel
 
-from contenttypes import ContentType
+from django.contrib.contenttypes.models import ContentType
 
 class Link(PolymorphicModel):
     title = models.CharField(max_length=1024, blank=True)
     # null=True so it won't conflict with uniqueness
-    slug = models.SlughField(max_length=1024, blank=True, null=True, unique=True)
+    slug = models.SlugField(max_length=1024, blank=True, null=True, unique=True)
     description = models.TextField(blank=True)
 
     tags = TaggableManager(blank=True)
