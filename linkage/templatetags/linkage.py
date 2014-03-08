@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 
 from contextlib import contextmanager
 
@@ -5,9 +6,10 @@ from linkage.models import Link, Menu
 
 from django.db.models import Q
 from django import template
-from django.template.loaders import get_template
+from django.template.loader import get_template
 
 register = template.Library()
+
 
 @contextmanager
 def extra_context(context, extra, **kwargs):
@@ -40,8 +42,8 @@ def load_links_with(*tags):
     return qs
 
 
-@register.simple_tag(takes_context=True)
-def link(context, name, **kwargs):
+@register.simple_tag(takes_context=True, name='link')
+def do_link(context, name, **kwargs):
     try:
         link = Link.objects.select_related('items').get(
             Q(title=name) | Q(slug=name)
@@ -56,8 +58,8 @@ def link(context, name, **kwargs):
         return template.render(context)
 
 
-@register.simple_tag(takes_context=True)
-def menu(context, name, **kwargs):
+@register.simple_tag(takes_context=True, name='menu')
+def do_menu(context, name, **kwargs):
     try:
         menu = Menu.objects.select_related('items').get(
             Q(title=name) | Q(slug=name)
@@ -70,4 +72,3 @@ def menu(context, name, **kwargs):
 
     with extra_context(context, kwargs, menu=menu):
         return template.render(context)
-
