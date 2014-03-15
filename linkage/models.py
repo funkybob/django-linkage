@@ -38,11 +38,14 @@ class SimpleLink(Link):
 
 
 # Models we can find a list page for
-LISTABLE_OBJECTS = ContentType.objects.get_for_models(*[
-    model
-    for app, model in models.get_models()
-    if callable(getattr(model, 'get_list_url', None))
-])
+LISTABLE_OBJECTS = lazy(
+    lambda: ContentType.objects.get_for_models(*[
+        model
+        for app, model in models.get_models()
+        if callable(getattr(model, 'get_list_url', None))
+    ]),
+    list
+)
 
 
 class ObjectTypeLink(Link):
@@ -55,11 +58,14 @@ class ObjectTypeLink(Link):
 
 
 # The list of models we know how to get a url for
-LINKABLE_OBJECTS = ContentType.objects.get_for_models(*[
-    model
-    for app, model in models.get_models()
-    if callable(getattr(model, 'get_absolute_url', None))
-])
+LINKABLE_OBJECTS = lazy(
+    lambda: ContentType.objects.get_for_models(*[
+        model
+        for app, model in models.get_models()
+        if callable(getattr(model, 'get_absolute_url', None))
+    ]),
+    list
+)
 
 
 class ObjectLink(Link):
