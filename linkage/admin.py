@@ -22,7 +22,7 @@ class LinkAdmin(PolymorphicParentModelAdmin):
 
     child_models = child_models
 
-admin.site.register(models.Link, LindAdmin)
+admin.site.register(models.Link, LinkAdmin)
 
 class MenuItemInline(admin.TabularInline):
     model = models.MenuItem
