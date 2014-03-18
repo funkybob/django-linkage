@@ -102,7 +102,7 @@ class MenuItem(models.Model):
     level = models.PositiveIntegerField(default=0)
     order = models.PositiveIntegerField(default=0)
     label = models.CharField(max_length=1024, blank=True)
-    link = model.ForeignKey('Link', null=True, blank=True)
+    link = models.ForeignKey('Link', null=True, blank=True)
 
     class Meta:
         ordering = ('order',)
