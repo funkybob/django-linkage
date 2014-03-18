@@ -2,6 +2,7 @@
 from django.contrib.contenttypes import generic
 from django.contrib.contenttypes.models import ContentType
 from django.db import models
+from django.utils.functional import lazy
 
 from taggit.managers import TaggableManager
 from polymorphic import PolymorphicModel
@@ -100,8 +101,8 @@ class MenuItem(models.Model):
     menu = models.ForeignKey('Menu', related_name='items')
     level = models.PositiveIntegerField(default=0)
     order = models.PositiveIntegerField(default=0)
-    label = model.CharField(max_length=1024, blank=True)
-    link = model.ForeignKey('Link', null=True, blank=True)
+    label = models.CharField(max_length=1024, blank=True)
+    link = models.ForeignKey('Link', null=True, blank=True)
 
     class Meta:
         ordering = ('order',)
