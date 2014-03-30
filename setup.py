@@ -23,6 +23,6 @@ setup(
     install_requires = [
         'Django>=1.6',
         'django-polymorphic==0.5.3',
-	'django-taggit==0.11.2',
+        'django-taggit==0.11.2',
     ],
 )
