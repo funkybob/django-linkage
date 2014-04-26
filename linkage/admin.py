@@ -5,22 +5,30 @@ from django.db.models import OneToOneField
 from polymorphic.admin import PolymorphicParentModelAdmin, PolymorphicChildModelAdmin
 
 from . import models
+from . import forms
 
 class LinkChildAdmin(PolymorphicChildModelAdmin):
     base_model = models.Link
 
-# create child admins
-child_models = [
-    (rel.field.model, LinkChildAdmin)
-    for rel in models.Link._meta.get_all_related_objects()
-    if isinstance(rel.field, OneToOneField) and issubclass(rel.field.model, models.Link)
-]
+
+class ObjectTypeLinkAdmin(LinkChildAdmin):
+    form_class = forms.ObjectTypeLinkForm
+
+
+class ObjectLinkAdmin(LinkChildAdmin):
+    form_class = forms.ObjectLinkForm
+
 
 class LinkAdmin(PolymorphicParentModelAdmin):
     base_model = models.Link
     list_display = ('title', 'slug', 'href', 'description',)
 
-    child_models = child_models
+    child_models = (
+        #(models.Link, LinkChildAdmin),
+        (models.SimpleLink, LinkChildAdmin),
+        (models.ObjectTypeLink, ObjectTypeLinkAdmin),
+        (models.ObjectLink, ObjectLinkAdmin),
+    )
 
 admin.site.register(models.Link, LinkAdmin)
 
