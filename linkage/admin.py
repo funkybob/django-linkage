@@ -12,11 +12,11 @@ class LinkChildAdmin(PolymorphicChildModelAdmin):
 
 
 class ObjectTypeLinkAdmin(LinkChildAdmin):
-    form_class = forms.ObjectTypeLinkForm
+    form = forms.ObjectTypeLinkForm
 
 
 class ObjectLinkAdmin(LinkChildAdmin):
-    form_class = forms.ObjectLinkForm
+    form = forms.ObjectLinkForm
 
 
 class LinkAdmin(PolymorphicParentModelAdmin):
