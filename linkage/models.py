@@ -1,8 +1,6 @@
 
 from django.contrib.contenttypes import generic
-from django.contrib.contenttypes.models import ContentType
 from django.db import models
-from django.utils.functional import lazy
 
 from taggit.managers import TaggableManager
 from polymorphic import PolymorphicModel
@@ -38,41 +36,15 @@ class SimpleLink(Link):
         return self.url
 
 
-# Models we can find a list page for
-LISTABLE_OBJECTS = lazy(
-    lambda: ContentType.objects.get_for_models(*[
-        model
-        for app, model in models.get_models()
-        if callable(getattr(model, 'get_list_url', None))
-    ]),
-    list
-)
-
-
 class ObjectTypeLink(Link):
-    object_type = models.ForeignKey('contenttypes.ContentType',
-        limit_choices_to=LISTABLE_OBJECTS
-    )
+    object_type = models.ForeignKey('contenttypes.ContentType')
 
     def href(self):
         return self.object_type.model_class().get_list_url()
 
 
-# The list of models we know how to get a url for
-LINKABLE_OBJECTS = lazy(
-    lambda: ContentType.objects.get_for_models(*[
-        model
-        for app, model in models.get_models()
-        if callable(getattr(model, 'get_absolute_url', None))
-    ]),
-    list
-)
-
-
 class ObjectLink(Link):
-    object_type = models.ForeignKey('contenttypes.ContentType',
-        limit_choices_to=LINKABLE_OBJECTS
-    )
+    object_type = models.ForeignKey('contenttypes.ContentType')
     object_id = models.PositiveIntegerField()
     content_object = generic.GenericForeignKey('object_type', 'object_id')
 
