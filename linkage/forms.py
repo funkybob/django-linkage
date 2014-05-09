@@ -38,6 +38,13 @@ class ObjectTypeLinkForm(forms.ModelForm):
 
     class Meta:
         model = models.ObjectTypeLink
+        fields = [
+            'title',
+            'slug',
+            'description',
+            'tags',
+            'object_type',
+        ]
 
 
 class ObjectLinkForm(forms.ModelForm):
@@ -48,3 +55,11 @@ class ObjectLinkForm(forms.ModelForm):
 
     class Meta:
         model = models.ObjectLink
+        fields = [
+            'title',
+            'slug',
+            'description',
+            'tags',
+            'object_type',
+            'object_id',
+        ]
