@@ -1,6 +1,7 @@
 
 from django.contrib.contenttypes import generic
 from django.db import models
+from django.shortcuts import resolve_url
 
 from taggit.managers import TaggableManager
 from polymorphic import PolymorphicModel
@@ -33,7 +34,7 @@ class SimpleLink(Link):
     url = models.CharField(max_length=1024)
 
     def href(self):
-        return self.url
+        return resolve_url(self.url)
 
 
 class ObjectTypeLink(Link):
